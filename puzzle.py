@@ -12,21 +12,47 @@ CKnave = Symbol("C is a Knave")
 # Puzzle 0
 # A says "I am both a knight and a knave."
 knowledge0 = And(
-    # TODO
+    # A cannot be both a knight and a knave
+    Not(And(AKnave, AKnight)),
+    # A can be a knight of a knave
+    Or(AKnave, AKnight),
+    # A says I am both a knight and a knave
+    # if this is true, A is a knight
+    Implication(AKnight, And(AKnight, AKnave)),
 )
 
 # Puzzle 1
 # A says "We are both knaves."
 # B says nothing.
 knowledge1 = And(
-    # TODO
+    # A cannot be both a knight and a knave
+    Not(And(AKnave, AKnight)),
+    # A can be a knight of a knave
+    Or(AKnave, AKnight),
+    # B cannot be both a knight and a knave
+    Not(And(BKnave, BKnight)),
+    # B can be a knight of a knave
+    Or(BKnave, BKnight),
+    # A says we are both knaves
+    Biconditional(AKnight, And(AKnave, BKnave)),
 )
 
 # Puzzle 2
 # A says "We are the same kind."
 # B says "We are of different kinds."
 knowledge2 = And(
-    # TODO
+    # A cannot be both a knight and a knave
+    Not(And(AKnave, AKnight)),
+    # A can be a knight of a knave
+    Or(AKnave, AKnight),
+    # B cannot be both a knight and a knave
+    Not(And(BKnave, BKnight)),
+    # B can be a knight of a knave
+    Or(BKnave, BKnight),
+    # A says we are both the same kind
+    Biconditional(AKnight, Or(And(AKnight, BKnight), And(AKnave, BKnave))),
+    # B says we are different kinds
+    Biconditional(BKnight, Or(And(AKnight, Not(BKnight)), And(AKnave, Not(BKnave)))),
 )
 
 # Puzzle 3
@@ -35,7 +61,26 @@ knowledge2 = And(
 # B says "C is a knave."
 # C says "A is a knight."
 knowledge3 = And(
-    # TODO
+    # A cannot be both a knight and a knave
+    Not(And(AKnave, AKnight)),
+    # A can be a knight of a knave
+    Or(AKnave, AKnight),
+    # B cannot be both a knight and a knave
+    Not(And(BKnave, BKnight)),
+    # B can be a knight of a knave
+    Or(BKnave, BKnight),
+    # C cannot be both a knight and a knave
+    Not(And(CKnave, CKnight)),
+    # C can be a knight of a knave
+    Or(CKnave, CKnight),
+    # C says A is a knight
+    Biconditional(CKnight, AKnight),
+    # B says C is a knave
+    Biconditional(BKnight, CKnave),
+    # A says I am a knight or a knave
+    Biconditional(AKnight, Or(AKnight, AKnave)),
+    # B says A said I am a knight
+    Biconditional(BKnight, Biconditional(AKnight, AKnave)),
 )
 
 
@@ -45,7 +90,7 @@ def main():
         ("Puzzle 0", knowledge0),
         ("Puzzle 1", knowledge1),
         ("Puzzle 2", knowledge2),
-        ("Puzzle 3", knowledge3)
+        ("Puzzle 3", knowledge3),
     ]
     for puzzle, knowledge in puzzles:
         print(puzzle)
